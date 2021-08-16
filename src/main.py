@@ -53,7 +53,7 @@ def filter_country(data, country_names):
 
 
 if __name__ == '__main__':
-    findspark.init('C:\Spark\spark')
+    findspark.init('C:\\Spark\\spark')
     sc = SparkContext("local", "pyspark")
     spark = SparkSession.builder.getOrCreate()
 
