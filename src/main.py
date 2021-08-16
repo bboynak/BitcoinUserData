@@ -34,7 +34,7 @@ def rename_column(data, col_name, new_col_name):
     return data.withColumnRenamed(col_name, new_col_name)
 
 
-def filter_country(data, country_names):
+def filter_country(data, country_names, country_column_name='country'):
     """
     Filters the data frame by specified county names.
 
@@ -42,12 +42,17 @@ def filter_country(data, country_names):
     :type data: pyspark.sql.dataframe.DataFrame
     :param country_names: country names to filter
     :type country_names: list[str]
-    :raise: ValueError if country_name is not in data
+    :param country_column_name: name of column in data which contains the countries
+    :type country_names: str, default='country'
+    :raise: ValueError if country_column_name is not in data
     :return: filtered data frame
     :rtype: pyspark.sql.dataframe.DataFrame
 
     """
-    return data[data.country.isin(country_names)]
+    if not country_column_name in data.columns:
+        raise ValueError(f"The value '{country_column_name}' for country_column_name does not exist in the data.")
+
+    return data[data[country_column_name].isin(country_names)]
 
 
 
@@ -84,3 +89,7 @@ if __name__ == '__main__':
     df_client = df_client.drop('first_name')
     df_client = df_client.drop('last_name')
     df_financial = df_financial.drop('cc_n')
+
+# data = [('george', 'wilburg', 'Germany'),('tom', 'None', 'Netherlands'),('None', 'None', 'United Kingdom')]
+# df = spark.createDataFrame(data, schema = ['first_name', 'last_name', 'country'])
+# df.show()
