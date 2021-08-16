@@ -1,4 +1,4 @@
-from src import main
+from src.main import rename_column
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
 sc = SparkContext("local", "pyspark")
