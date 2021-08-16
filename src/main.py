@@ -7,15 +7,6 @@ import argparse
 import findspark 
 from pyspark.sql.types import *
 
-#Arguments
-# p = argparse.ArgumentParser()
-
-# p.add_argument('country', required=True)
-# p.add_argument('path1', required=True)
-# p.add_argument('path2', required=True)
-
-
-#Renaming the columns
 def rename_column(data, col_name, new_col_name):
     """ 
     Renaming a column in a data frame.
@@ -55,19 +46,26 @@ def filter_country(data, country_names, country_column_name='country'):
     return data[data[country_column_name].isin(country_names)]
 
 
-
-
 if __name__ == '__main__':
+    # Parse command line arguments
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--country', type=str, required=True, nargs='+')
+    arg_parser.add_argument('--path1', type=str, required=True)
+    arg_parser.add_argument('--path2', type=str, required=True)
+    args = arg_parser.parse_args()
+
+    # Load Spark dependencies
     findspark.init('C:\\Spark\\spark')
     sc = SparkContext("local", "pyspark")
     spark = SparkSession.builder.getOrCreate()
 
-    #Load datasets
-    path1 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_one.csv"
-    path2 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_two.csv"
 
-    df_client = spark.read.option("header",True).csv(path1)
-    df_financial = spark.read.option("header",True).csv(path2)
+    #Load datasets
+    # path1 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_one.csv"
+    # path2 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_two.csv"
+
+    df_client = spark.read.option("header",True).csv(args.path1)
+    df_financial = spark.read.option("header",True).csv(args.path2)
 
 
     #Rename columns in both dataframes
@@ -80,8 +78,8 @@ if __name__ == '__main__':
     df = df_client.join(df_financial, 'client_identifier')
 
     #Filter
-    country = ['Netherlands','United Kingdom']
-    df_filtered = filter_country(df, country)
+    # country = ['Netherlands','United Kingdom']
+    df_filtered = filter_country(df, args.country)
     df_filtered.show()
 
     # Organizing the data frames
@@ -89,7 +87,3 @@ if __name__ == '__main__':
     df_client = df_client.drop('first_name')
     df_client = df_client.drop('last_name')
     df_financial = df_financial.drop('cc_n')
-
-# data = [('george', 'wilburg', 'Germany'),('tom', 'None', 'Netherlands'),('None', 'None', 'United Kingdom')]
-# df = spark.createDataFrame(data, schema = ['first_name', 'last_name', 'country'])
-# df.show()
