@@ -6,6 +6,23 @@ from pyspark.sql.types import StructType
 import argparse
 import findspark 
 from pyspark.sql.types import *
+import logging
+import logging.handlers
+import sys
+
+ #Initialise logger with rotating file policy
+logger = logging.getLogger('log_scope')
+log_formatter = logging.Formatter("%(asctime)s - [%(levelname)s]: %(message)s")
+rotating_file_handler = logging.handlers.RotatingFileHandler("C:\\Users\\bboyn\\OneDrive\\Desktop\\Bitcoin User Data\\logs\\log.txt",
+                            maxBytes=1024*1024,
+                            backupCount=2)
+console_handler = logging.StreamHandler(sys.stdout)#Also log to console window
+
+rotating_file_handler.setFormatter(log_formatter)
+console_handler.setFormatter(log_formatter)
+
+logger.addHandler(rotating_file_handler)
+logger.addHandler(console_handler)
 
 def rename_column(data, col_name, new_col_name):
     """ 
@@ -41,6 +58,7 @@ def filter_country(data, country_names, country_column_name='country'):
 
     """
     if not country_column_name in data.columns:
+        logging.getLogger('log_scope').error(f"The value '{country_column_name}' for country_column_name does not exist in the data.")
         raise ValueError(f"The value '{country_column_name}' for country_column_name does not exist in the data.")
 
     return data[data[country_column_name].isin(country_names)]
@@ -58,7 +76,6 @@ if __name__ == '__main__':
     findspark.init('C:\\Spark\\spark')
     sc = SparkContext("local", "pyspark")
     spark = SparkSession.builder.getOrCreate()
-
 
     #Load datasets
     path1 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_one.csv"
