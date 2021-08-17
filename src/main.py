@@ -47,12 +47,12 @@ def filter_country(data, country_names, country_column_name='country'):
 
 
 if __name__ == '__main__':
-    # Parse command line arguments
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--country', type=str, required=True, nargs='+')
-    arg_parser.add_argument('--path1', type=str, required=True)
-    arg_parser.add_argument('--path2', type=str, required=True)
-    args = arg_parser.parse_args()
+    # # Parse command line arguments
+    # arg_parser = argparse.ArgumentParser()
+    # arg_parser.add_argument('--country', type=str, required=True, nargs='+')
+    # arg_parser.add_argument('--path1', type=str, required=True)
+    # arg_parser.add_argument('--path2', type=str, required=True)
+    # args = arg_parser.parse_args()
 
     # Load Spark dependencies
     findspark.init('C:\\Spark\\spark')
@@ -61,11 +61,11 @@ if __name__ == '__main__':
 
 
     #Load datasets
-    # path1 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_one.csv"
-    # path2 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_two.csv"
+    path1 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_one.csv"
+    path2 = "file:///C:/Users/bboyn/OneDrive/Desktop/Bitcoin User Data/dataset_two.csv"
 
-    df_client = spark.read.option("header",True).csv(args.path1)
-    df_financial = spark.read.option("header",True).csv(args.path2)
+    df_client = spark.read.option("header",True).csv(path1)
+    df_financial = spark.read.option("header",True).csv(path2)
 
     # Organizing the data frames
     ## Drop personal client information
@@ -84,8 +84,8 @@ if __name__ == '__main__':
     df = df_client.join(df_financial, 'client_identifier')
 
     #Filter
-    # country = ['Netherlands','United Kingdom']
-    df_filtered = filter_country(df, args.country)
-    df_filtered.show()
+    country = ['Netherlands','United Kingdom']
+    df_filtered = filter_country(df, country)
+    df_filtered.write.option('header', True).csv(path='C:\\Users\\bboyn\\OneDrive\\Desktop\\Bitcoin User Data\\client_data')
 
 
