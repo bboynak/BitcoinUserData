@@ -39,6 +39,11 @@ def rename_column(data, col_name, new_col_name):
     :rtype: spark.sql.dataframe.DataFrame
 
     """
+    if not col_name in data.columns:
+        logging.getLogger('log_scope').error(f"No column named '{col_name}'.")
+        raise ValueError(f"No column named '{col_name}'.")
+
+
     return data.withColumnRenamed(col_name, new_col_name)
 
 
