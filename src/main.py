@@ -67,12 +67,18 @@ if __name__ == '__main__':
     df_client = spark.read.option("header",True).csv(args.path1)
     df_financial = spark.read.option("header",True).csv(args.path2)
 
+    # Organizing the data frames
+    ## Drop personal client information
+    df_client = df_client.drop('first_name')
+    df_client = df_client.drop('last_name')
+    df_financial = df_financial.drop('cc_n')
 
     #Rename columns in both dataframes
     df_client = rename_column(df_client, 'id', 'client_identifier')
     df_financial = rename_column(df_financial, 'id', 'client_identifier')
     df_financial = rename_column(df_financial, 'btc_a', 'bitcoin_address')
     df_financial = rename_column(df_financial, 'cc_t', 'credit_card_type')
+
 
     #Join dataframes on 'id' / 'client_identifier'
     df = df_client.join(df_financial, 'client_identifier')
@@ -82,8 +88,4 @@ if __name__ == '__main__':
     df_filtered = filter_country(df, args.country)
     df_filtered.show()
 
-    # Organizing the data frames
-    ## Drop personal client information
-    df_client = df_client.drop('first_name')
-    df_client = df_client.drop('last_name')
-    df_financial = df_financial.drop('cc_n')
+
