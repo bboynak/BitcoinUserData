@@ -103,10 +103,11 @@ if __name__ == '__main__':
         df_financial = rename_column(df_financial, 'id', 'client_identifier')
         df_financial = rename_column(df_financial, 'btc_a', 'bitcoin_address')
         df_financial = rename_column(df_financial, 'cc_t', 'credit_card_type')
+
     #Error, column does not exist
     except ValueError as ve:
         #Log the error and end the program
-        logging.getLogger('log_scope').error('Failed to rename one a columns. Program ending early, no output will be saved.', ve.message)
+        logger.error('Failed to rename one a columns. Program ending early, no output will be saved.', ve.message)
         sys.exit(1)
 
     #Join dataframes on 'id' / 'client_identifier'
@@ -114,6 +115,7 @@ if __name__ == '__main__':
 
     #Filter
     df_filtered = filter_country(df, args.country)
+    df_filtered.show()
 
     #Clear previous saved outputs
     output_directory = 'client_data'
@@ -123,5 +125,7 @@ if __name__ == '__main__':
 
     #Save the data
     df_filtered.write.option('header', True).csv(path=output_directory)
+    logger.info('Output successfully saved to client_data')
+
 
 
