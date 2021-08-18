@@ -9,11 +9,13 @@ from pyspark.sql.types import *
 import logging
 import logging.handlers
 import sys
+import shutil
+import os
 
 #Initialise logger with rotating file policy
 logger = logging.getLogger('log_scope')
 log_formatter = logging.Formatter("%(asctime)s - [%(levelname)s]: %(message)s")
-rotating_file_handler = logging.handlers.RotatingFileHandler("C:\\Users\\bboyn\\OneDrive\\Desktop\\Bitcoin User Data\\logs\\log.txt",
+rotating_file_handler = logging.handlers.RotatingFileHandler("logs\\log.txt",
                             maxBytes=1024*1024,
                             backupCount=2)
 console_handler = logging.StreamHandler(sys.stdout)#Also log to console window
@@ -72,13 +74,14 @@ def filter_country(data, country_names, country_column_name='country'):
 if __name__ == '__main__':
     # # Parse command line arguments
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--country', type=str, required=True, nargs='+')
     arg_parser.add_argument('--path1', type=str, required=True)
     arg_parser.add_argument('--path2', type=str, required=True)
+    arg_parser.add_argument('--country', type=str, required=True, nargs='+')
+    arg_parser.add_argument('--spark_path', type=str, default='C:\\Spark\\spark')
     args = arg_parser.parse_args()
 
     # Load Spark dependencies
-    findspark.init('C:\\Spark\\spark')
+    findspark.init(args.spark_path)
     sc = SparkContext("local", "pyspark")
     spark = SparkSession.builder.getOrCreate()
 
@@ -104,6 +107,14 @@ if __name__ == '__main__':
 
     #Filter
     df_filtered = filter_country(df, args.country)
-    df_filtered.write.option('header', True).csv(path='C:\\Users\\bboyn\\OneDrive\\Desktop\\Bitcoin User Data\\client_data')
+
+    #Clear previous saved outputs
+    output_directory = 'client_data'
+
+    if os.path.exists(output_directory):
+        shutil.rmtree(output_directory)
+
+    #Save the data
+    df_filtered.write.option('header', True).csv(path=output_directory)
 
 

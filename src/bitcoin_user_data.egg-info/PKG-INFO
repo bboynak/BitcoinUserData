@@ -1,0 +1,42 @@
+Metadata-Version: 2.1
+Name: bitcoin-user-data
+Version: 0.0.1
+Summary: This is a PySpark exercise for loading, transforming and joining dataframes from two file sources.
+Home-page: https://github.com/bboynak/BitcoinUserData/
+Author: Bengi Boynak
+Author-email: bboynak@gmail.com
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/bboynak/BitcoinUserData/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.7.6
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+Bitcoin User Data Exercise
+===============
+This is a `PySpark` exercise for loading, transforming and joining dataframes from 
+two file sources.
+
+
+Introduction
+-----------
+This application is aiming to help the company `KommatiPara` that deals with bitcoin trading.
+
+
+They have two dataset; first dataset includes client information and the second dataset contains their financial 
+details. Since they are planning to reach out to their clients for a new marketing push, 
+the company wants a new dataset containing the emails and some financial information 
+of their clients that locate in the `United Kingdom` and the `Netherlands`.
+
+*Note: the data does not represent real client information*
+
+Setup
+-----------------
+
+
+What does it do
+---------------
+
+

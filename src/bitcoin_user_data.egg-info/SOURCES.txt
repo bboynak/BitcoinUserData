@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+setup.cfg
+src/bitcoin_user_data.egg-info/PKG-INFO
+src/bitcoin_user_data.egg-info/SOURCES.txt
+src/bitcoin_user_data.egg-info/dependency_links.txt
+src/bitcoin_user_data.egg-info/top_level.txt
