@@ -12,13 +12,13 @@ import sys
 import shutil
 import os
 
-#Initialise logger with rotating file policy
+#Setting up logging
 logger = logging.getLogger('log_scope')
 log_formatter = logging.Formatter("%(asctime)s - [%(levelname)s]: %(message)s")
 rotating_file_handler = logging.handlers.RotatingFileHandler("logs\\log.txt",
                             maxBytes=1024*1024,
                             backupCount=2)
-console_handler = logging.StreamHandler(sys.stdout)#Also log to console window
+console_handler = logging.StreamHandler(sys.stdout) #Also log to console window
 
 rotating_file_handler.setFormatter(log_formatter)
 console_handler.setFormatter(log_formatter)
@@ -71,6 +71,8 @@ def filter_country(data, country_names, country_column_name='country'):
     return data[data[country_column_name].isin(country_names)]
 
 
+
+
 if __name__ == '__main__':
     # # Parse command line arguments
     arg_parser = argparse.ArgumentParser()
@@ -80,7 +82,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('--spark_path', type=str, default='C:\\Spark\\spark')
     args = arg_parser.parse_args()
 
-    # Load Spark dependencies
+    # Create Spark session
     findspark.init(args.spark_path)
     sc = SparkContext("local", "pyspark")
     spark = SparkSession.builder.getOrCreate()
@@ -96,11 +98,16 @@ if __name__ == '__main__':
     df_financial = df_financial.drop('cc_n')
 
     #Rename columns in both dataframes
-    df_client = rename_column(df_client, 'id', 'client_identifier')
-    df_financial = rename_column(df_financial, 'id', 'client_identifier')
-    df_financial = rename_column(df_financial, 'btc_a', 'bitcoin_address')
-    df_financial = rename_column(df_financial, 'cc_t', 'credit_card_type')
-
+    try:
+        df_client = rename_column(df_client, 'id', 'client_identifier')
+        df_financial = rename_column(df_financial, 'id', 'client_identifier')
+        df_financial = rename_column(df_financial, 'btc_a', 'bitcoin_address')
+        df_financial = rename_column(df_financial, 'cc_t', 'credit_card_type')
+    #Error, column does not exist
+    except ValueError as ve:
+        #Log the error and end the program
+        logging.getLogger('log_scope').error(ve.msg)
+        sys.exit(1)
 
     #Join dataframes on 'id' / 'client_identifier'
     df = df_client.join(df_financial, 'client_identifier')
