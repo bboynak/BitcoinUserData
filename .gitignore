@@ -4,4 +4,4 @@
 logs/*
 client_data/*
 
-exercise.md
+src/*.egg-info
