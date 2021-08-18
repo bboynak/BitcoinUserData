@@ -106,7 +106,7 @@ if __name__ == '__main__':
     #Error, column does not exist
     except ValueError as ve:
         #Log the error and end the program
-        logging.getLogger('log_scope').error(ve.msg)
+        logging.getLogger('log_scope').error('Failed to rename one a columns. Program ending early, no output will be saved.', ve.message)
         sys.exit(1)
 
     #Join dataframes on 'id' / 'client_identifier'
