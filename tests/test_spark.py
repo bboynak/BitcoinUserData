@@ -34,7 +34,7 @@ def test_rename_column_happy_test():
 
 def test_filter_country_chosen_country_not_in_data():
     #Arrange 
-    data = [('george', 'wilburg', 'Germany'),('tom', 'None', 'Netherlands'),('None', 'None', 'United Kingdom')]
+    data = [('george', 'wilburg', 'Germany'),('tom', 'blue', 'Netherlands'),('sam', 'pink', 'United Kingdom')]
     df = spark.createDataFrame(data, schema = ['first_name', 'last_name', 'country'])
     
     #Act
@@ -43,15 +43,17 @@ def test_filter_country_chosen_country_not_in_data():
     #Assert
     assert filtered_df.count() == 0
     
-def test_filter_country_country_column_name_not_exists():
+def test_filter_country_column_name_not_exists():
     #Arrange 
-    data = [('george', 'wilburg', 'Germany'),('tom', 'None', 'Netherlands'),('None', 'None', 'United Kingdom')]
+    data = [('george', 'wilburg', 'Germany'),('tom', 'blue', 'Netherlands'),('sam', 'pink', 'United Kingdom')]
     df = spark.createDataFrame(data, schema = ['first_name', 'last_name', 'country'])
-    
     country_column_name = 'NOTAREALCOLUMN'
+
+    #Act
     with pytest.raises(ValueError) as column_exception:
         filter_country(df, ['Paris'], country_column_name)
 
+    #Assert
     assert str(column_exception.value) == f"The value '{country_column_name}' for country_column_name does not exist in the data."
     
 def test_filter_country_happy_test():
