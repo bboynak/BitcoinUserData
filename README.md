@@ -1,7 +1,6 @@
 Bitcoin User Data Exercise
 ===============
-This is a `PySpark` exercise for loading, transforming and joining dataframes from 
-two file sources.
+This is a `PySpark` exercise for loading, transforming and joining dataframes from two file sources.
 
 
 Introduction
@@ -14,7 +13,7 @@ details. Since they are planning to reach out to their clients for a new marketi
 the company wants a new dataset containing the emails and some financial information 
 of their clients that locate in the `United Kingdom` and the `Netherlands`.
 
-*Note: the data does not represent real client information*
+*Note: the data does not represent real client information.*
 
 Setup
 -----------------
