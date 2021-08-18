@@ -7,6 +7,5 @@ setup(name='bitcoin-user-data',
       description='Python Distribution Utilities',
       author='Bengi Boynak',
       author_email='bboynak@gmail.com',
-      url='https://github.com/bboynak/BitcoinUserData/',
-      packages=['src'],
+      url='https://github.com/bboynak/BitcoinUserData/'
      )
