@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 import findspark
 import pytest
 #Import functions from main code to be tested
-from src.main import rename_column, filter_country
+from src.bitcoin_user_data.main import rename_column, filter_country
 
 findspark.init('C:\\Spark\\spark')
 sc = SparkContext("local", "pyspark")
